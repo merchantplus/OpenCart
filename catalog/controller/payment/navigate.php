@@ -134,7 +134,7 @@ class ControllerPaymentNaviGate extends Controller {
 			}
 
 			if ($response_info[1] == '1') {
-				if (strtoupper($response_info[38]) == strtoupper(md5($this->config->get('navigate_hash') . $this->config->get('navigate_login') . $response_info[7] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {
+				/*if (strtoupper($response_info[38]) == strtoupper(md5($this->config->get('navigate_hash') . $this->config->get('navigate_login') . $response_info[7] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {*/
 					$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 
 					$message = '';
@@ -160,7 +160,7 @@ class ControllerPaymentNaviGate extends Controller {
 					}				
 
 					$this->model_checkout_order->update($this->session->data['order_id'], $this->config->get('navigate_order_status_id'), $message, false);				
-				}
+				//}
 
 				$json['success'] = $this->url->link('checkout/success', '', 'SSL');
 			} else {
