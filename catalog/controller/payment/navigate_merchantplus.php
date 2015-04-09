@@ -48,9 +48,10 @@ class ControllerPaymentNavigateMerchantplus extends Controller {
 		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-
+        $year = substr($this->request->post['cc_expire_date_year'], -2); ;
 		$data = array();
 
+		$json = array();
 		// Merchant Info
 		$data['x_login']              = $this->config->get('navigate_merchantplus_login');
 		$data['x_tran_key']           = $this->config->get('navigate_merchantplus_key');
@@ -68,7 +69,8 @@ class ControllerPaymentNavigateMerchantplus extends Controller {
 		
 		// Test Card
 		$data['x_card_num']           = str_replace(' ', '', $this->request->post['cc_number']);
-		$data['x_exp_date']           = $this->request->post['cc_expire_date_month'] . $this->request->post['cc_expire_date_year'];
+		
+		$data['x_exp_date']           = $this->request->post['cc_expire_date_month'] . $year;
 		$data['x_card_code']          = $this->request->post['cc_cvv2'];
 		$data['x_trans_id']           = '';
 		
@@ -130,9 +132,6 @@ class ControllerPaymentNavigateMerchantplus extends Controller {
 		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data, '', '&'));
 
 		$response = curl_exec($curl);
-
-		$json = array();
-
 		if (curl_error($curl)) {
 			$json['error'] = 'CURL ERROR: ' . curl_errno($curl) . '::' . curl_error($curl);
 
